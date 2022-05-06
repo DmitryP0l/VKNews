@@ -7,6 +7,6 @@
 
 import UIKit
 
-class NewsFeedService {
+final class NewsFeedService {
 
 }
