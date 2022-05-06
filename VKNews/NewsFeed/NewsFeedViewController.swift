@@ -11,22 +11,15 @@ protocol NewsFeedDisplayLogic: AnyObject {
   func displayData(viewModel: NewsFeed.Model.ViewModel.ViewModelData)
 }
 
-class NewsFeedViewController: UIViewController, NewsFeedDisplayLogic {
 
-  var interactor: NewsFeedBusinessLogic?
-  var router: (NSObjectProtocol & NewsFeedRoutingLogic)?
+final class NewsFeedViewController: UIViewController, NewsFeedDisplayLogic {
 
-  // MARK: Object lifecycle
+    @IBOutlet weak var tableView: UITableView!
+    
+    var interactor: NewsFeedBusinessLogic?
+    var router: (NSObjectProtocol & NewsFeedRoutingLogic)?
+
   
-  override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-    super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-    setup()
-  }
-  
-  required init?(coder aDecoder: NSCoder) {
-    super.init(coder: aDecoder)
-    setup()
-  }
   
   // MARK: Setup
   
@@ -50,10 +43,39 @@ class NewsFeedViewController: UIViewController, NewsFeedDisplayLogic {
   
   override func viewDidLoad() {
     super.viewDidLoad()
+      tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+      setup()
   }
   
   func displayData(viewModel: NewsFeed.Model.ViewModel.ViewModelData) {
-
+      switch viewModel {
+      case .some:
+          print(".some.viewComtroller")
+      case .displayNewsFeed:
+          print(".displayNewsFeed ViewController")
+          print("готовыми данными, которые пришли от Presenter, можно заполнять ячейки, поля и т.д")
+      }
   }
   
+}
+
+//MARK: - UITableViewDelegate, UITableViewDataSource
+extension NewsFeedViewController: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 5
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! UITableViewCell
+        cell.textLabel?.text = "index \(indexPath.row)"
+        return cell
+    }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("select cell \(indexPath.row) у ViewController")
+        print("срабатывает метод makeRequest у interactor с целью получить данные и переходим в файл Interactor")
+        interactor?.makeRequest(request: .getFeed)
+        
+    }
+    
+    
 }

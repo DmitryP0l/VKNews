@@ -11,7 +11,7 @@ protocol NewsFeedRoutingLogic {
 
 }
 
-class NewsFeedRouter: NSObject, NewsFeedRoutingLogic {
+final class NewsFeedRouter: NSObject, NewsFeedRoutingLogic {
 
   weak var viewController: NewsFeedViewController?
   
