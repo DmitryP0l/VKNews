@@ -18,6 +18,7 @@ final class NewsFeedViewController: UIViewController, NewsFeedDisplayLogic {
     
     var interactor: NewsFeedBusinessLogic?
     var router: (NSObjectProtocol & NewsFeedRoutingLogic)?
+    private var feedViewModel = FeedViewModel.init(cells: [])
 
   
   
@@ -43,17 +44,18 @@ final class NewsFeedViewController: UIViewController, NewsFeedDisplayLogic {
   
   override func viewDidLoad() {
     super.viewDidLoad()
-      tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
       setup()
+      tableView.register(UINib(nibName: "NewsFeedCell", bundle: nil), forCellReuseIdentifier: NewsFeedCell.identifier)
+      interactor?.makeRequest(request: .getNewsFeed)
+      
   }
   
   func displayData(viewModel: NewsFeed.Model.ViewModel.ViewModelData) {
       switch viewModel {
-      case .some:
-          print(".some.viewComtroller")
-      case .displayNewsFeed:
-          print(".displayNewsFeed ViewController")
-          print("готовыми данными, которые пришли от Presenter, можно заполнять ячейки, поля и т.д")
+ 
+      case .displayNewsFeed(feedViewModel: let feedViewModel):
+          self.feedViewModel = feedViewModel
+          tableView.reloadData()
       }
   }
   
@@ -62,20 +64,17 @@ final class NewsFeedViewController: UIViewController, NewsFeedDisplayLogic {
 //MARK: - UITableViewDelegate, UITableViewDataSource
 extension NewsFeedViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
+        return feedViewModel.cells.count
+    }
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 312
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! UITableViewCell
-        cell.textLabel?.text = "index \(indexPath.row)"
+        let cell = tableView.dequeueReusableCell(withIdentifier: NewsFeedCell.identifier, for: indexPath) as! NewsFeedCell
+        let cellViewModel = feedViewModel.cells[indexPath.row]
+        cell.set(viewModel: cellViewModel)
         return cell
     }
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("select cell \(indexPath.row) у ViewController")
-        print("срабатывает метод makeRequest у interactor с целью получить данные и переходим в файл Interactor")
-        interactor?.makeRequest(request: .getFeed)
-        
-    }
-    
     
 }
