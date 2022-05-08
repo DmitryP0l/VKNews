@@ -6,9 +6,12 @@
 //
 
 import UIKit
-class WebImageView: UIImageView {
+final class WebImageView: UIImageView {
+    
     func setImage(imageURL: String) {
-        guard let url = URL(string: imageURL) else { return }
+        guard let url = URL(string: imageURL) else {
+            self.image = nil
+            return }
         if let cachedResponse = URLCache.shared.cachedResponse(for: URLRequest(url: url)) {
             self.image = UIImage(data: cachedResponse.data)
             return

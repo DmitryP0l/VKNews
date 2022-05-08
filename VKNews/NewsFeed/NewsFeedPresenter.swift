@@ -13,13 +13,14 @@ protocol NewsFeedPresentationLogic {
 
 final class NewsFeedPresenter: NewsFeedPresentationLogic {
     
-  weak var viewController: NewsFeedDisplayLogic?
+    weak var viewController: NewsFeedDisplayLogic?
     let dateFormatter: DateFormatter = {
         let dt = DateFormatter()
         dt.locale = Locale(identifier: "ru_RU")
         dt.dateFormat = "d MMM 'в' HH:mm"
         return dt
     }()
+    var cellLayoutCalculator: NewsFeedCellLayoutCalculatorProtocol = NewsFeedCellLayoutCalculator()
   
   func presentData(response: NewsFeed.Model.Response.ResponseType) {
       switch response {
@@ -38,6 +39,7 @@ final class NewsFeedPresenter: NewsFeedPresentationLogic {
         let date = Date(timeIntervalSince1970: feedItem.date)
         let dateTitle = dateFormatter.string(from: date)
         let photoAttachement = self.photoAttachement(feedItem: feedItem)
+        let sizes = cellLayoutCalculator.sizes(postText: feedItem.text, photoAttachement: photoAttachement)
         
         return FeedViewModel.Cell.init(iconUrlString: profile?.photo ?? "noPhoto",
                                        name: profile?.name ?? "noName",
@@ -47,7 +49,8 @@ final class NewsFeedPresenter: NewsFeedPresentationLogic {
                                        comments: String(feedItem.comments?.count ?? 0),
                                        shares: String(feedItem.reposts?.count ?? 0),
                                        views: String(feedItem.views?.count ?? 0),
-                                       photoAttachement: photoAttachement)
+                                       photoAttachement: photoAttachement,
+                                       sizes: sizes)
     }
     private func profile(for sourceId: Int, profiles: [Profile], groups: [Group]) -> ProfileRepresenable? {
         let profilesOrGroups: [ProfileRepresenable] = sourceId > 0 ? profiles : groups
