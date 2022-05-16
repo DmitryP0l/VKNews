@@ -52,6 +52,7 @@ final class NewsFeedViewController: UIViewController, NewsFeedDisplayLogic {
   }
     private func setupTableView() {
         tableView.register(UINib(nibName: "NewsFeedCell", bundle: nil), forCellReuseIdentifier: NewsFeedCell.identifier)
+        tableView.register(NewsFeedCodeCell.self, forCellReuseIdentifier: NewsFeedCodeCell.identifier)
         tableView.separatorStyle = .none
         tableView.backgroundColor = .clear
         
@@ -74,13 +75,19 @@ extension NewsFeedViewController: UITableViewDelegate, UITableViewDataSource {
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         let cellViewModel = feedViewModel.cells[indexPath.row]
-        return cellViewModel.sizes.totalHeight
+//        return cellViewModel.sizes.totalHeight
+        return 300
     }
     
+//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+//        let cell = tableView.dequeueReusableCell(withIdentifier: NewsFeedCell.identifier, for: indexPath) as! NewsFeedCell
+//        let cellViewModel = feedViewModel.cells[indexPath.row]
+//        cell.set(viewModel: cellViewModel)
+//        return cell
+//    }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: NewsFeedCell.identifier, for: indexPath) as! NewsFeedCell
-        let cellViewModel = feedViewModel.cells[indexPath.row]
-        cell.set(viewModel: cellViewModel)
+        let cell = tableView.dequeueReusableCell(withIdentifier: NewsFeedCodeCell.identifier, for: indexPath) as! NewsFeedCodeCell
         return cell
     }
     
