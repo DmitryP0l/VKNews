@@ -14,9 +14,11 @@ protocol NewsFeedBusinessLogic {
 
 final class NewsFeedInteractor: NewsFeedBusinessLogic {
 
-  var presenter: NewsFeedPresentationLogic?
-  var service: NewsFeedService?
+    var presenter: NewsFeedPresentationLogic?
+    var service: NewsFeedService?
     private var fetcher: DataFetcher = NetworkDataFetcher(networking: NetworkService())
+    private var revealedPostsIds = [Int]()
+    private var feedResponse: FeedResponse?
   
   func makeRequest(request: NewsFeed.Model.Request.RequestType) {
     if service == nil {
@@ -25,11 +27,18 @@ final class NewsFeedInteractor: NewsFeedBusinessLogic {
       switch request {
       case .getNewsFeed:
           fetcher.getFeed { [weak self](feedResponse) in
-              
-              guard let feedResponse = feedResponse else { return }
-              self?.presenter?.presentData(response: NewsFeed.Model.Response.ResponseType.presentNewsFeed(feed: feedResponse))
+              self?.feedResponse = feedResponse
+              self?.presentFeed()
           }
+      case .revealPostID(postID: let postID):
+          revealedPostsIds.append(postID)
+          presentFeed()
       }
   }
+    
+    private func presentFeed() {
+        guard let feedResponse = feedResponse else { return }
+        presenter?.presentData(response: NewsFeed.Model.Response.ResponseType.presentNewsFeed(feed: feedResponse, revealedPostsIds: revealedPostsIds))
+    }
   
 }

@@ -11,7 +11,6 @@ protocol NewsFeedDisplayLogic: AnyObject {
   func displayData(viewModel: NewsFeed.Model.ViewModel.ViewModelData)
 }
 
-
 final class NewsFeedViewController: UIViewController, NewsFeedDisplayLogic {
 
     @IBOutlet weak var tableView: UITableView!
@@ -20,8 +19,6 @@ final class NewsFeedViewController: UIViewController, NewsFeedDisplayLogic {
     var router: (NSObjectProtocol & NewsFeedRoutingLogic)?
     private var feedViewModel = FeedViewModel.init(cells: [])
 
-  
-  
   // MARK: Setup
   
   private func setup() {
@@ -37,8 +34,6 @@ final class NewsFeedViewController: UIViewController, NewsFeedDisplayLogic {
   }
   
   // MARK: Routing
-  
-
   
   // MARK: View lifecycle
   
@@ -69,11 +64,17 @@ final class NewsFeedViewController: UIViewController, NewsFeedDisplayLogic {
 }
 
 //MARK: - UITableViewDelegate, UITableViewDataSource
+ 
 extension NewsFeedViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return feedViewModel.cells.count
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        let cellViewModel = feedViewModel.cells[indexPath.row]
+        return cellViewModel.sizes.totalHeight
+    }
+    
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         let cellViewModel = feedViewModel.cells[indexPath.row]
         return cellViewModel.sizes.totalHeight
     }
@@ -89,7 +90,19 @@ extension NewsFeedViewController: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: NewsFeedCodeCell.identifier, for: indexPath) as! NewsFeedCodeCell
         let cellViewModel = feedViewModel.cells[indexPath.row]
         cell.set(viewModel: cellViewModel)
+        cell.delegate = self
         return cell
     }
+}
+
+
+// MARK: - NewsFeedCodeCellDelegate
+extension NewsFeedViewController: NewsFeedCodeCellDelegate {
+    func revealPost(for cell: NewsFeedCodeCell) {
+        guard let indexPath = tableView.indexPath(for: cell) else { return }
+        let cellViewModel = feedViewModel.cells[indexPath.row]
+        interactor?.makeRequest(request: NewsFeed.Model.Request.RequestType.revealPostID(postID: cellViewModel.postId))
+    }
+    
     
 }

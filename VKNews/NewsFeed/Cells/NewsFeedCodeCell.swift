@@ -8,8 +8,13 @@
 import Foundation
 import UIKit
 
+protocol NewsFeedCodeCellDelegate: AnyObject {
+    func revealPost(for cell: NewsFeedCodeCell)
+}
+
 final class NewsFeedCodeCell: UITableViewCell {
     static let identifier = "NewsFeedCodeCell"
+    weak var delegate: NewsFeedCodeCellDelegate?
     
     private let cardView: UIView = {
         let view = UIView()
@@ -31,7 +36,7 @@ final class NewsFeedCodeCell: UITableViewCell {
     private let iconImageView: WebImageView = {
        let imageView = WebImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.layer.cornerRadius = imageView.frame.width / 2
+        imageView.layer.cornerRadius = Constants.topViewHeight / 2
         imageView.clipsToBounds = true
         return imageView
     }()
@@ -62,6 +67,18 @@ final class NewsFeedCodeCell: UITableViewCell {
         label.font = Constants.postLabelFont
         label.textColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
         return label
+    }()
+    
+    //MARK: - more text button
+    
+    private let moreTextButton: UIButton = {
+        let button = UIButton()
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 15, weight: .medium)
+        button.setTitleColor(#colorLiteral(red: 0, green: 0.5898008943, blue: 1, alpha: 1), for: .normal)
+        button.contentHorizontalAlignment = .left
+        button.contentVerticalAlignment = .center
+        button.setTitle("Показать полностью", for: .normal)
+        return button
     }()
     
    //MARK: - post image view layer
@@ -171,6 +188,10 @@ final class NewsFeedCodeCell: UITableViewCell {
         return label
     }()
     
+    override func prepareForReuse() {
+        iconImageView.setImage(imageURL: "")
+        postImageView.setImage(imageURL: "")
+    }
     
     //MARK: - init
     
@@ -184,6 +205,7 @@ final class NewsFeedCodeCell: UITableViewCell {
         overlayThirdLayerOnTopView()
         overlayThirdLayerOnBottomView()
         overlayFourthLayersOnBottomViewViews()
+        moreTextButton.addTarget(self, action: #selector(moreTextButtonTouch), for: .touchUpInside)
     }
     
     required init?(coder: NSCoder) {
@@ -193,9 +215,6 @@ final class NewsFeedCodeCell: UITableViewCell {
     //MARK: - methods
     
     func set(viewModel: FeedCellViewModel) {
-        
-        
-        
         iconImageView.setImage(imageURL: viewModel.iconUrlString)
         nameLabel.text = viewModel.name
         dateLabel.text = viewModel.date
@@ -204,9 +223,11 @@ final class NewsFeedCodeCell: UITableViewCell {
         commentsLabel.text = viewModel.comments
         sharesLabel.text = viewModel.shares
         viewsLabel.text = viewModel.views
+        
         postLabel.frame = viewModel.sizes.postLabelFrame
         postImageView.frame = viewModel.sizes.attachementFrame
         bottomView.frame = viewModel.sizes.bottomViewFrame
+        moreTextButton.frame = viewModel.sizes.moreTextButtonFrame
         
         if let photoAttachement = viewModel.photoAttachement {
             postImageView.setImage(imageURL: photoAttachement.photoUrlString)
@@ -216,12 +237,18 @@ final class NewsFeedCodeCell: UITableViewCell {
         }
     }
     
+    @objc func moreTextButtonTouch() {
+        delegate?.revealPost(for: self)
+    }
+    
     private func setupView() {
-        addSubview(cardView)
+        contentView.addSubview(cardView)
         cardView.addSubview(topView)
         cardView.addSubview(postLabel)
+        cardView.addSubview(moreTextButton)
         cardView.addSubview(postImageView)
         cardView.addSubview(bottomView)
+        
         topView.addSubview(iconImageView)
         topView.addSubview(nameLabel)
         topView.addSubview(dateLabel)
