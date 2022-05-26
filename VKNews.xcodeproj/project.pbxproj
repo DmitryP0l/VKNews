@@ -40,6 +40,7 @@
 		B4DC4580283E420D008ACC70 /* RowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4DC457F283E420D008ACC70 /* RowLayout.swift */; };
 		B4DC4583283F9A80008ACC70 /* TitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4DC4582283F9A80008ACC70 /* TitleView.swift */; };
 		B4DC4585283F9C9A008ACC70 /* InsetableTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4DC4584283F9C9A008ACC70 /* InsetableTextField.swift */; };
+		B4DC4587283FA752008ACC70 /* UserResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4DC4586283FA752008ACC70 /* UserResponse.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -92,6 +93,7 @@
 		B4DC457F283E420D008ACC70 /* RowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RowLayout.swift; sourceTree = "<group>"; };
 		B4DC4582283F9A80008ACC70 /* TitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleView.swift; sourceTree = "<group>"; };
 		B4DC4584283F9C9A008ACC70 /* InsetableTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsetableTextField.swift; sourceTree = "<group>"; };
+		B4DC4586283FA752008ACC70 /* UserResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserResponse.swift; sourceTree = "<group>"; };
 		B50E85BC726474D518E04C3A /* Pods-VKNews.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VKNews.release.xcconfig"; path = "Target Support Files/Pods-VKNews/Pods-VKNews.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -202,6 +204,7 @@
 			children = (
 				B41C76352823CA2F004A59D1 /* Models */,
 				B48CEE47281BE3C200AF9C78 /* AuthService.swift */,
+				B4DC4586283FA752008ACC70 /* UserResponse.swift */,
 				B4D8905F281C198900563EC4 /* API.swift */,
 				B4D8905D281C185100563EC4 /* NetworkService.swift */,
 				B41C76382823CFA4004A59D1 /* NetworkDataFetcher.swift */,
@@ -380,6 +383,7 @@
 				B4DC4583283F9A80008ACC70 /* TitleView.swift in Sources */,
 				B45580842824426800D70DF4 /* NewsFeedRouter.swift in Sources */,
 				B40A7E982828424F0028FCE6 /* Constraints.swift in Sources */,
+				B4DC4587283FA752008ACC70 /* UserResponse.swift in Sources */,
 				B48CEE48281BE3C200AF9C78 /* AuthService.swift in Sources */,
 				B4D89060281C198900563EC4 /* API.swift in Sources */,
 				B45580852824426800D70DF4 /* NewsFeedModels.swift in Sources */,

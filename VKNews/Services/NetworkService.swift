@@ -31,7 +31,7 @@ final class NetworkService {
         var components = URLComponents()
         components.scheme = API.scheme
         components.host = API.host
-        components.path = API.newsFeed
+        components.path = path
         components.queryItems = params.map { URLQueryItem(name: $0, value: $1) }
         let url = components.url!
         return url

@@ -22,6 +22,7 @@ final class NewsFeedPresenter: NewsFeedPresentationLogic {
     }()
     var cellLayoutCalculator: NewsFeedCellLayoutCalculatorProtocol = NewsFeedCellLayoutCalculator()
   
+    
   func presentData(response: NewsFeed.Model.Response.ResponseType) {
       switch response {
       case .presentNewsFeed(let feed, let revealedPostsIds):
@@ -31,8 +32,12 @@ final class NewsFeedPresenter: NewsFeedPresentationLogic {
           }
           let feedViewModel = FeedViewModel.init(cells: cells)
           viewController?.displayData(viewModel: .displayNewsFeed(feedViewModel: feedViewModel))
+      case .presentUserInfo(user: let user):
+          let userViewModel = UserViewModel.init(photoUrlString: user?.photo100)
+          viewController?.displayData(viewModel: NewsFeed.Model.ViewModel.ViewModelData.displayUser(userViewModel: userViewModel))
       }
   }
+    
     
     private func cellViewModel(from feedItem: FeedItem, profiles: [Profile], groups: [Group], revealedPostsIds: [Int]) -> FeedViewModel.Cell {
         
@@ -60,6 +65,8 @@ final class NewsFeedPresenter: NewsFeedPresentationLogic {
                                        photoAttachements: photoAttachments,
                                        sizes: sizes)
     }
+    
+    
     private func profile(for sourceId: Int, profiles: [Profile], groups: [Group]) -> ProfileRepresenable? {
         let profilesOrGroups: [ProfileRepresenable] = sourceId > 0 ? profiles : groups
         let normalSourceId = sourceId >= 0 ? sourceId : -sourceId
@@ -68,6 +75,8 @@ final class NewsFeedPresenter: NewsFeedPresentationLogic {
         }
         return profileRepresentable
     }
+    
+    
     private func photoAttachement(feedItem: FeedItem) -> FeedViewModel.FeedCellPhotoAttachement? {
         guard let photos = feedItem.attachments?.compactMap({ (attachment) in
             attachment.photo
@@ -78,6 +87,7 @@ final class NewsFeedPresenter: NewsFeedPresentationLogic {
                                                            width: firstPhoto.width,
                                                            height: firstPhoto.height)
     }
+    
     
     private func photoAttachments(feedItem: FeedItem) -> [FeedViewModel.FeedCellPhotoAttachement] {
         guard let attachments = feedItem.attachments else { return [] }

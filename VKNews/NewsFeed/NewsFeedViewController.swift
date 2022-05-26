@@ -42,9 +42,10 @@ final class NewsFeedViewController: UIViewController, NewsFeedDisplayLogic {
     super.viewDidLoad()
       view.backgroundColor = #colorLiteral(red: 0.1764705926, green: 0.01176470611, blue: 0.5607843399, alpha: 1)
       setup()
-      setupTableView()
       setupTopBar()
-      interactor?.makeRequest(request: .getNewsFeed)
+      setupTableView()
+      makeRequest()
+      
   }
     
     private func setupTopBar() {
@@ -59,12 +60,19 @@ final class NewsFeedViewController: UIViewController, NewsFeedDisplayLogic {
         tableView.separatorStyle = .none
         tableView.backgroundColor = .clear
     }
+    
+    private func makeRequest() {
+        interactor?.makeRequest(request: .getNewsFeed)
+        interactor?.makeRequest(request: .getUser)
+    }
   
   func displayData(viewModel: NewsFeed.Model.ViewModel.ViewModelData) {
       switch viewModel {
       case .displayNewsFeed(feedViewModel: let feedViewModel):
           self.feedViewModel = feedViewModel
           tableView.reloadData()
+      case .displayUser(userViewModel: let userViewModel):
+          titleView.set(userViewModel: userViewModel)
       }
   }
   

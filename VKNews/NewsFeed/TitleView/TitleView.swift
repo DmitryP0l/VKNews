@@ -8,6 +8,10 @@
 import Foundation
 import UIKit
 
+protocol TitleViewViewModel {
+    var photoUrlString: String? { get }
+}
+
 class TitleView: UIView {
     
     private var myTextField = InsetableTextField()
@@ -27,6 +31,10 @@ class TitleView: UIView {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func set( userViewModel: TitleViewViewModel) {
+        myAvatarView.setImage(imageURL: userViewModel.photoUrlString!)
     }
     
     private func settingView() {
