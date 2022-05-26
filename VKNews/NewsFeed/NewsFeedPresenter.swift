@@ -39,11 +39,13 @@ final class NewsFeedPresenter: NewsFeedPresentationLogic {
         let profile = self.profile(for: feedItem.sourceId, profiles: profiles, groups: groups)
         let date = Date(timeIntervalSince1970: feedItem.date)
         let dateTitle = dateFormatter.string(from: date)
-        let photoAttachement = self.photoAttachement(feedItem: feedItem)
+        let photoAttachments = self.photoAttachments(feedItem: feedItem)
         let isFullSized = revealedPostsIds.contains { (postId) -> Bool in
             return postId == feedItem.postId
         }
-        let sizes = cellLayoutCalculator.sizes(postText: feedItem.text, photoAttachement: photoAttachement, isFullSizedPost: isFullSized)
+        let sizes = cellLayoutCalculator.sizes(postText: feedItem.text,
+                                               photoAttachments: photoAttachments,
+                                               isFullSizedPost: isFullSized)
         
         
         return FeedViewModel.Cell.init(postId: feedItem.postId,
@@ -55,7 +57,7 @@ final class NewsFeedPresenter: NewsFeedPresentationLogic {
                                        comments: String(feedItem.comments?.count ?? 0),
                                        shares: String(feedItem.reposts?.count ?? 0),
                                        views: String(feedItem.views?.count ?? 0),
-                                       photoAttachement: photoAttachement,
+                                       photoAttachements: photoAttachments,
                                        sizes: sizes)
     }
     private func profile(for sourceId: Int, profiles: [Profile], groups: [Group]) -> ProfileRepresenable? {
@@ -67,13 +69,23 @@ final class NewsFeedPresenter: NewsFeedPresentationLogic {
         return profileRepresentable
     }
     private func photoAttachement(feedItem: FeedItem) -> FeedViewModel.FeedCellPhotoAttachement? {
-        guard let photos = feedItem.attachments?.compactMap({ (attachement) in
-            attachement.photo
+        guard let photos = feedItem.attachments?.compactMap({ (attachment) in
+            attachment.photo
         }), let firstPhoto = photos.first else {
             return nil
         }
         return FeedViewModel.FeedCellPhotoAttachement.init(photoUrlString: firstPhoto.srcBIG,
                                                            width: firstPhoto.width,
                                                            height: firstPhoto.height)
+    }
+    
+    private func photoAttachments(feedItem: FeedItem) -> [FeedViewModel.FeedCellPhotoAttachement] {
+        guard let attachments = feedItem.attachments else { return [] }
+        return attachments.compactMap ({ (attachment) -> FeedViewModel.FeedCellPhotoAttachement? in
+            guard let photo = attachment.photo else { return nil }
+            return FeedViewModel.FeedCellPhotoAttachement.init(photoUrlString: photo.srcBIG,
+                                                               width: photo.width,
+                                                               height: photo.height)
+        })
     }
 }

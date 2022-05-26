@@ -14,7 +14,6 @@ protocol AuthServiceDelegate: AnyObject {
     func authServiceSignInDidFail()
 }
 
-
 class AuthService: NSObject {
     
     private let appId = "8151944"

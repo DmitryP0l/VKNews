@@ -81,6 +81,10 @@ final class NewsFeedCodeCell: UITableViewCell {
         return button
     }()
     
+    //MARK: - gallery Collection View
+    
+    private let galleryCollectionView = GalleryCollectionView()
+    
    //MARK: - post image view layer
     
     private let postImageView: WebImageView = {
@@ -225,16 +229,26 @@ final class NewsFeedCodeCell: UITableViewCell {
         viewsLabel.text = viewModel.views
         
         postLabel.frame = viewModel.sizes.postLabelFrame
-        postImageView.frame = viewModel.sizes.attachementFrame
+        
         bottomView.frame = viewModel.sizes.bottomViewFrame
         moreTextButton.frame = viewModel.sizes.moreTextButtonFrame
-        
-        if let photoAttachement = viewModel.photoAttachement {
+    
+        if let photoAttachement = viewModel.photoAttachements.first, viewModel.photoAttachements.count == 1 {
             postImageView.setImage(imageURL: photoAttachement.photoUrlString)
             postImageView.isHidden = false
-        } else {
+            galleryCollectionView.isHidden = true
+            postImageView.frame = viewModel.sizes.attachementFrame
+        } else if viewModel.photoAttachements.count > 1 {
+            galleryCollectionView.frame = viewModel.sizes.attachementFrame
             postImageView.isHidden = true
+            galleryCollectionView.isHidden = false
+            galleryCollectionView.set(photos: viewModel.photoAttachements)
         }
+        else {
+            postImageView.isHidden = true
+            galleryCollectionView.isHidden = true
+        }
+        
     }
     
     @objc func moreTextButtonTouch() {
@@ -247,6 +261,7 @@ final class NewsFeedCodeCell: UITableViewCell {
         cardView.addSubview(postLabel)
         cardView.addSubview(moreTextButton)
         cardView.addSubview(postImageView)
+        cardView.addSubview(galleryCollectionView)
         cardView.addSubview(bottomView)
         
         topView.addSubview(iconImageView)

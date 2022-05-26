@@ -18,6 +18,7 @@ final class NewsFeedViewController: UIViewController, NewsFeedDisplayLogic {
     var interactor: NewsFeedBusinessLogic?
     var router: (NSObjectProtocol & NewsFeedRoutingLogic)?
     private var feedViewModel = FeedViewModel.init(cells: [])
+    private var titleView = TitleView()
 
   // MARK: Setup
   
@@ -42,15 +43,21 @@ final class NewsFeedViewController: UIViewController, NewsFeedDisplayLogic {
       view.backgroundColor = #colorLiteral(red: 0.1764705926, green: 0.01176470611, blue: 0.5607843399, alpha: 1)
       setup()
       setupTableView()
+      setupTopBar()
       interactor?.makeRequest(request: .getNewsFeed)
-      
   }
+    
+    private func setupTopBar() {
+        self.navigationController?.hidesBarsOnSwipe = true
+        self.navigationController?.navigationBar.shadowImage = UIImage()
+        self.navigationItem.titleView = titleView
+    }
+    
     private func setupTableView() {
         tableView.register(UINib(nibName: "NewsFeedCell", bundle: nil), forCellReuseIdentifier: NewsFeedCell.identifier)
         tableView.register(NewsFeedCodeCell.self, forCellReuseIdentifier: NewsFeedCodeCell.identifier)
         tableView.separatorStyle = .none
         tableView.backgroundColor = .clear
-        
     }
   
   func displayData(viewModel: NewsFeed.Model.ViewModel.ViewModelData) {
