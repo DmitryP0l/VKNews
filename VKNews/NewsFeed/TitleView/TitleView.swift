@@ -18,7 +18,7 @@ class TitleView: UIView {
     private var myAvatarView: WebImageView = {
         let imageView = WebImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.backgroundColor = .orange
+        imageView.backgroundColor = .gray
         imageView.clipsToBounds = true
         return imageView
     }()

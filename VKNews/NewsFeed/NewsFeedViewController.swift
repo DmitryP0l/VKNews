@@ -19,6 +19,11 @@ final class NewsFeedViewController: UIViewController, NewsFeedDisplayLogic {
     var router: (NSObjectProtocol & NewsFeedRoutingLogic)?
     private var feedViewModel = FeedViewModel.init(cells: [])
     private var titleView = TitleView()
+    private var refreshControl: UIRefreshControl = {
+       let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        return refreshControl
+    }()
 
   // MARK: Setup
   
@@ -54,11 +59,17 @@ final class NewsFeedViewController: UIViewController, NewsFeedDisplayLogic {
         self.navigationItem.titleView = titleView
     }
     
+    @objc private func refresh() {
+        interactor?.makeRequest(request: NewsFeed.Model.Request.RequestType.getNewsFeed)
+    }
+    
     private func setupTableView() {
         tableView.register(UINib(nibName: "NewsFeedCell", bundle: nil), forCellReuseIdentifier: NewsFeedCell.identifier)
         tableView.register(NewsFeedCodeCell.self, forCellReuseIdentifier: NewsFeedCodeCell.identifier)
         tableView.separatorStyle = .none
         tableView.backgroundColor = .clear
+        tableView.contentInset.top = 8
+        tableView.addSubview(refreshControl)
     }
     
     private func makeRequest() {
@@ -71,11 +82,11 @@ final class NewsFeedViewController: UIViewController, NewsFeedDisplayLogic {
       case .displayNewsFeed(feedViewModel: let feedViewModel):
           self.feedViewModel = feedViewModel
           tableView.reloadData()
+          refreshControl.endRefreshing()
       case .displayUser(userViewModel: let userViewModel):
           titleView.set(userViewModel: userViewModel)
       }
   }
-  
 }
 
 //MARK: - UITableViewDelegate, UITableViewDataSource
@@ -110,8 +121,8 @@ extension NewsFeedViewController: UITableViewDelegate, UITableViewDataSource {
     }
 }
 
-
 // MARK: - NewsFeedCodeCellDelegate
+
 extension NewsFeedViewController: NewsFeedCodeCellDelegate {
     func revealPost(for cell: NewsFeedCodeCell) {
         guard let indexPath = tableView.indexPath(for: cell) else { return }
