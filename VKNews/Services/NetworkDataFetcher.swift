@@ -8,7 +8,7 @@
 import Foundation
 
 protocol DataFetcher {
-    func getFeed(response: @escaping (FeedResponse?) -> Void)
+    func getFeed(nextBathFrom: String?, response: @escaping (FeedResponse?) -> Void)
     func getUser(response: @escaping (UserResponse?) -> Void)
 }
 
@@ -22,7 +22,7 @@ struct NetworkDataFetcher: DataFetcher {
         self.authService = authService
     }
     
-    func getFeed(response: @escaping (FeedResponse?) -> Void) {
+    func getFeed(nextBathFrom: String?, response: @escaping (FeedResponse?) -> Void) {
         let params = ["filters": "post, photo"]
         networking.request(path: API.newsFeed, params: params) { data, error in
             if let error = error {

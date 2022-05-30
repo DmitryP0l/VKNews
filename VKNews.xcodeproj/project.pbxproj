@@ -122,6 +122,7 @@
 			isa = PBXGroup;
 			children = (
 				B41C76362823CAE7004A59D1 /* FeedResponse.swift */,
+				B4DC4586283FA752008ACC70 /* UserResponse.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -204,7 +205,6 @@
 			children = (
 				B41C76352823CA2F004A59D1 /* Models */,
 				B48CEE47281BE3C200AF9C78 /* AuthService.swift */,
-				B4DC4586283FA752008ACC70 /* UserResponse.swift */,
 				B4D8905F281C198900563EC4 /* API.swift */,
 				B4D8905D281C185100563EC4 /* NetworkService.swift */,
 				B41C76382823CFA4004A59D1 /* NetworkDataFetcher.swift */,

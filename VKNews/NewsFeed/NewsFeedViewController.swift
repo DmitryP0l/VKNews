@@ -21,7 +21,7 @@ final class NewsFeedViewController: UIViewController, NewsFeedDisplayLogic {
     private var titleView = TitleView()
     private var refreshControl: UIRefreshControl = {
        let refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        refreshControl.addTarget(NewsFeedViewController.self, action: #selector(refresh), for: .valueChanged)
         return refreshControl
     }()
 
@@ -87,6 +87,11 @@ final class NewsFeedViewController: UIViewController, NewsFeedDisplayLogic {
           titleView.set(userViewModel: userViewModel)
       }
   }
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        if scrollView.contentOffset.y > scrollView.contentSize.height / 1.1 {
+        interactor?.makeRequest(request: NewsFeed.Model.Request.RequestType.getNextBatch)
+        }
+    }
 }
 
 //MARK: - UITableViewDelegate, UITableViewDataSource

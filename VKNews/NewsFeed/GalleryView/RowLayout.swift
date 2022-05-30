@@ -14,7 +14,7 @@ protocol RowLayoutDelegate: AnyObject {
 
 class RowLayout: UICollectionViewLayout {
     weak var delegale: RowLayoutDelegate!
-    static var numberOfRows = 1
+    static var numberOfRows = 2
     private var cellPadding: CGFloat = 8
     private var cache = [UICollectionViewLayoutAttributes]()
     private var contentWidth: CGFloat = 0
@@ -47,9 +47,9 @@ class RowLayout: UICollectionViewLayout {
         for row in 0 ..< RowLayout.numberOfRows {
             yOffset.append(CGFloat(row) * rowHeight)
         }
-        var row = 0
-        var xOffset = [CGFloat](repeating: 0, count: RowLayout.numberOfRows)
         
+        var xOffset = [CGFloat](repeating: 0, count: RowLayout.numberOfRows)
+        var row = 0
         for item in 0 ..< collectionView.numberOfItems(inSection: 0) {
             let indexPath = IndexPath(item: item, section: 0)
             let ratio = photosRatios[indexPath.row]
