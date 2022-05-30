@@ -36,7 +36,10 @@ final class NewsFeedInteractor: NewsFeedBusinessLogic {
               self?.presenter?.presentData(response: NewsFeed.Model.Response.ResponseType.presentNewsFeed(feed: feed, revealedPostsIds: revealedPostIds))
           })
       case .getNextBatch:
-          print("hell")
+          self.presenter?.presentData(response: NewsFeed.Model.Response.ResponseType.presentFooterLoader)
+          service?.getNextBath(completion: { revealedPostIds, feed in
+              self.presenter?.presentData(response: NewsFeed.Model.Response.ResponseType.presentNewsFeed(feed: feed, revealedPostsIds: revealedPostIds))
+          })
       }
   }
   

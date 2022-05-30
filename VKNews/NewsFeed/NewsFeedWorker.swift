@@ -29,7 +29,7 @@ final class NewsFeedService {
     }
     
     func getFeed(completion: @escaping ([Int], FeedResponse) -> Void) {
-        fetcher.getFeed { [weak self] feed in
+        fetcher.getFeed(nextBathFrom: nil) { [weak self] feed in
             self?.feedResponse = feed
             guard let feedResponse = self?.feedResponse else { return }
             completion(self!.revealedPostsIds, feedResponse)
@@ -43,8 +43,35 @@ final class NewsFeedService {
     
     func getNextBath(completion: @escaping ([Int], FeedResponse) -> Void ){
         newFromInProcess  = feedResponse?.nextFrom
-        fetcher.getFeed { feed in
-            <#code#>
+        fetcher.getFeed(nextBathFrom: newFromInProcess) { [weak self] feed in
+            guard let feed = feed else { return }
+            guard self?.feedResponse?.nextFrom != feed.nextFrom else { return }
+            if self?.feedResponse == nil {
+                self?.feedResponse = feed
+            } else {
+                self?.feedResponse?.items.append(contentsOf: feed.items)
+
+                var profiles = feed.profiles
+                if let oldProfiles = self?.feedResponse?.profiles {
+                    let oldProfilesFiltered = oldProfiles.filter { oldProfile in
+                        !feed.profiles.contains(where: { $0.id == oldProfile.id })
+                    }
+                    profiles.append(contentsOf: oldProfilesFiltered)
+                }
+                self?.feedResponse?.profiles = profiles
+                
+                var groups = feed.groups
+                if let oldGroups = self?.feedResponse?.groups {
+                    let oldGroupsFiltered = oldGroups.filter { oldGroups in
+                        !feed.groups.contains(where: { $0.id == oldGroups.id })
+                    }
+                    groups.append(contentsOf: oldGroupsFiltered)
+                }
+                self?.feedResponse?.groups = groups
+                self?.feedResponse?.nextFrom = feed.nextFrom
+            }
+            guard let feedResponse = self?.feedResponse else { return }
+            completion(self!.revealedPostsIds, feedResponse)
         }
     }
 }

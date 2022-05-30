@@ -17,8 +17,10 @@ final class NewsFeedViewController: UIViewController, NewsFeedDisplayLogic {
     
     var interactor: NewsFeedBusinessLogic?
     var router: (NSObjectProtocol & NewsFeedRoutingLogic)?
-    private var feedViewModel = FeedViewModel.init(cells: [])
+    
+    private var feedViewModel = FeedViewModel.init(cells: [], footerTitle: nil)
     private var titleView = TitleView()
+    private lazy var footerView = FooterView()
     private var refreshControl: UIRefreshControl = {
        let refreshControl = UIRefreshControl()
         refreshControl.addTarget(NewsFeedViewController.self, action: #selector(refresh), for: .valueChanged)
@@ -50,7 +52,6 @@ final class NewsFeedViewController: UIViewController, NewsFeedDisplayLogic {
       setupTopBar()
       setupTableView()
       makeRequest()
-      
   }
     
     private func setupTopBar() {
@@ -70,21 +71,25 @@ final class NewsFeedViewController: UIViewController, NewsFeedDisplayLogic {
         tableView.backgroundColor = .clear
         tableView.contentInset.top = 8
         tableView.addSubview(refreshControl)
+        tableView.tableFooterView = footerView
     }
     
     private func makeRequest() {
-        interactor?.makeRequest(request: .getNewsFeed)
-        interactor?.makeRequest(request: .getUser)
+        interactor?.makeRequest(request: NewsFeed.Model.Request.RequestType.getNewsFeed)
+        interactor?.makeRequest(request: NewsFeed.Model.Request.RequestType.getUser)
     }
   
   func displayData(viewModel: NewsFeed.Model.ViewModel.ViewModelData) {
       switch viewModel {
       case .displayNewsFeed(feedViewModel: let feedViewModel):
           self.feedViewModel = feedViewModel
+          footerView.setTitle(feedViewModel.footerTitle)
           tableView.reloadData()
           refreshControl.endRefreshing()
       case .displayUser(userViewModel: let userViewModel):
           titleView.set(userViewModel: userViewModel)
+      case .displayFooterLoader:
+          footerView.showLoader()
       }
   }
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {

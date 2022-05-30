@@ -23,7 +23,8 @@ struct NetworkDataFetcher: DataFetcher {
     }
     
     func getFeed(nextBathFrom: String?, response: @escaping (FeedResponse?) -> Void) {
-        let params = ["filters": "post, photo"]
+        var params = ["filters": "post, photo"]
+        params["start_from"] = nextBathFrom
         networking.request(path: API.newsFeed, params: params) { data, error in
             if let error = error {
                 print("error recived requesting data: \(error.localizedDescription)")
