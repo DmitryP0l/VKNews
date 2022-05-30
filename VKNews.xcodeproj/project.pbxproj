@@ -26,6 +26,7 @@
 		B455809228254F8200D70DF4 /* WebImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B455809128254F8200D70DF4 /* WebImageView.swift */; };
 		B47D231B2844E2C900890917 /* FooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47D231A2844E2C900890917 /* FooterView.swift */; };
 		B47D231D2844EDF600890917 /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = B47D231C2844EDF600890917 /* Localizable.stringsdict */; };
+		B47D2320284557D500890917 /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47D231F284557D500890917 /* GradientView.swift */; };
 		B48CEE2E281ABC4B00AF9C78 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B48CEE2D281ABC4B00AF9C78 /* AppDelegate.swift */; };
 		B48CEE30281ABC4B00AF9C78 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B48CEE2F281ABC4B00AF9C78 /* SceneDelegate.swift */; };
 		B48CEE37281ABC5000AF9C78 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B48CEE36281ABC5000AF9C78 /* Assets.xcassets */; };
@@ -81,6 +82,7 @@
 		B455809128254F8200D70DF4 /* WebImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebImageView.swift; sourceTree = "<group>"; };
 		B47D231A2844E2C900890917 /* FooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FooterView.swift; sourceTree = "<group>"; };
 		B47D231C2844EDF600890917 /* Localizable.stringsdict */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; path = Localizable.stringsdict; sourceTree = "<group>"; };
+		B47D231F284557D500890917 /* GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
 		B48CEE2A281ABC4B00AF9C78 /* VKNews.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VKNews.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B48CEE2D281ABC4B00AF9C78 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B48CEE2F281ABC4B00AF9C78 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -134,9 +136,7 @@
 		B455807A2824421400D70DF4 /* NewsFeed */ = {
 			isa = PBXGroup;
 			children = (
-				B47D23192844E2A300890917 /* FooterView */,
-				B4DC4581283F9A5F008ACC70 /* TitleView */,
-				B4DC457A283E2E01008ACC70 /* GalleryView */,
+				B47D231E284557A500890917 /* Views */,
 				B455808C28250E6600D70DF4 /* Cells */,
 				B455808A2824FA7400D70DF4 /* NewsFeedViewController.storyboard */,
 				B455807F2824426800D70DF4 /* NewsFeedViewController.swift */,
@@ -157,7 +157,6 @@
 				B40A7E972828424F0028FCE6 /* Constraints.swift */,
 				B48CEE2D281ABC4B00AF9C78 /* AppDelegate.swift */,
 				B48CEE2F281ABC4B00AF9C78 /* SceneDelegate.swift */,
-				B455809128254F8200D70DF4 /* WebImageView.swift */,
 				B40A7E932827CD6F0028FCE6 /* StringExtension.swift */,
 			);
 			path = "Support Files";
@@ -181,6 +180,18 @@
 				B47D231A2844E2C900890917 /* FooterView.swift */,
 			);
 			path = FooterView;
+			sourceTree = "<group>";
+		};
+		B47D231E284557A500890917 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				B47D23192844E2A300890917 /* FooterView */,
+				B4DC4581283F9A5F008ACC70 /* TitleView */,
+				B4DC457A283E2E01008ACC70 /* GalleryView */,
+				B47D231F284557D500890917 /* GradientView.swift */,
+				B455809128254F8200D70DF4 /* WebImageView.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 		B48CEE21281ABC4B00AF9C78 = {
@@ -407,6 +418,7 @@
 				B455808E28250E9A00D70DF4 /* NewsFeedCell.swift in Sources */,
 				B4DC457C283E2E39008ACC70 /* GalleryCollectionView.swift in Sources */,
 				B45580862824426800D70DF4 /* NewsFeedViewController.swift in Sources */,
+				B47D2320284557D500890917 /* GradientView.swift in Sources */,
 				B40A7E9228267DB60028FCE6 /* NewsFeedCellLayoutCalculator.swift in Sources */,
 				B4DC4585283F9C9A008ACC70 /* InsetableTextField.swift in Sources */,
 			);
