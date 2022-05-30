@@ -17,6 +17,9 @@ class GalleryCollectionView: UICollectionView  {
         super.init(frame: .zero, collectionViewLayout: rowLayout)
         
         setCollectionView()
+        if let rowLayout = collectionViewLayout as? RowLayout {
+            rowLayout.delegale = self
+        }
     }
     
     required init?(coder: NSCoder) {
@@ -24,12 +27,12 @@ class GalleryCollectionView: UICollectionView  {
     }
     
     private func setCollectionView() {
-        register(GalleryCollectionViewCell.self, forCellWithReuseIdentifier: GalleryCollectionViewCell.identifier)
         delegate = self
         dataSource = self
         backgroundColor = .white
         showsHorizontalScrollIndicator = false
         showsVerticalScrollIndicator = false
+        register(GalleryCollectionViewCell.self, forCellWithReuseIdentifier: GalleryCollectionViewCell.identifier)
     }
     
     func set(photos: [FeedCellPhotoAttachementViewModel]) {
