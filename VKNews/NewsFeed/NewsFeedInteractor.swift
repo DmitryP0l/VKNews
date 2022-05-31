@@ -14,21 +14,32 @@ protocol NewsFeedBusinessLogic {
 
 final class NewsFeedInteractor: NewsFeedBusinessLogic {
 
-  var presenter: NewsFeedPresentationLogic?
-  var service: NewsFeedService?
-    private var fetcher: DataFetcher = NetworkDataFetcher(networking: NetworkService())
+    var presenter: NewsFeedPresentationLogic?
+    var service: NewsFeedService?
   
   func makeRequest(request: NewsFeed.Model.Request.RequestType) {
     if service == nil {
       service = NewsFeedService()
     }
       switch request {
+          
       case .getNewsFeed:
-          fetcher.getFeed { [weak self](feedResponse) in
-              
-              guard let feedResponse = feedResponse else { return }
-              self?.presenter?.presentData(response: NewsFeed.Model.Response.ResponseType.presentNewsFeed(feed: feedResponse))
-          }
+          service?.getFeed(completion: { [weak self] revealedPostIds, feed in
+              self?.presenter?.presentData(response: NewsFeed.Model.Response.ResponseType.presentNewsFeed(feed: feed, revealedPostsIds: revealedPostIds))
+          })
+      case .getUser:
+          service?.getUser(completion: { [weak self] user in
+              self?.presenter?.presentData(response: NewsFeed.Model.Response.ResponseType.presentUserInfo(user: user))
+          })
+      case .revealPostID(postID: let postID):
+          service?.revealPostIds(forPostId: postID, completion: { [weak self] revealedPostIds, feed in
+              self?.presenter?.presentData(response: NewsFeed.Model.Response.ResponseType.presentNewsFeed(feed: feed, revealedPostsIds: revealedPostIds))
+          })
+      case .getNextBatch:
+          self.presenter?.presentData(response: NewsFeed.Model.Response.ResponseType.presentFooterLoader)
+          service?.getNextBath(completion: { revealedPostIds, feed in
+              self.presenter?.presentData(response: NewsFeed.Model.Response.ResponseType.presentNewsFeed(feed: feed, revealedPostsIds: revealedPostIds))
+          })
       }
   }
   
